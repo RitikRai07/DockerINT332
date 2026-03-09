@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Lab - Nginx Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        
+        .docker-logo {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .status {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .details {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .details h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .details ul {
+            list-style: none;
+            color: #666;
+        }
+        
+        .details li {
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .details li:last-child {
+            border-bottom: none;
+        }
+        
+        .footer {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="docker-logo">🐳</div>
+        
+        <h1>Docker DevOps Lab</h1>
+        
+        <p>Nginx Container Running Successfully!</p>
+        
+        <div class="status">
+            ✓ Server is Running
+        </div>
+        
+        <div class="details">
+            <h3>Project Information</h3>
+            <ul>
+                <li>📦 Container: Custom Nginx (Alpine)</li>
+                <li>🚀 Port: 80 (Host: 8080)</li>
+                <li>🔧 Status: Active</li>
+                <li>👤 User: Non-root (Security)</li>
+                <li>🐧 Base OS: Alpine Linux</li>
+            </ul>
+        </div>
+        
+        <div class="details">
+            <h3>Docker Commands Used</h3>
+            <ul>
+                <li>docker build -t custom-nginx:v1 .</li>
+                <li>docker run -d -p 8080:80 custom-nginx:v1</li>
+                <li>docker logs container_id</li>
+            </ul>
+        </div>
+        
+        <p style="margin-top: 20px;">
+            This is part of the <strong>Docker DevOps Learning Lab</strong> with practical examples of containerization.
+        </p>
+        
+        <div class="footer">
+            <p>Docker Lab Project v1.0 | 2024</p>
+        </div>
+    </div>
+</body>
+</html>

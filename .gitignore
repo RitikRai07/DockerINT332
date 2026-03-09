@@ -1,0 +1,83 @@
+# Git ignore patterns for Docker DevOps Lab
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules/
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.sublime-project
+.sublime-workspace
+
+# OS specific
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Docker specific
+docker-compose.override.yml
+
+# Build outputs
+out/
+*.class
+*.jar
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Package managers
+package-lock.json
+yarn.lock
+Gemfile.lock
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+.cache/
+temp/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# IDE
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# Misc
+*.pem
+*.key
+*.crt
+secrets/
+private/
