@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  app:
+    image: node:18
+    container_name: nodejs_app
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    command: "sh -c 'npm install && npm start'"
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/nodedb
+      - NODE_ENV=development
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:7
+    container_name: mongodb_container
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: nodedb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - mongo_config:/data/configdb
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+  mongo_config:
+
+networks:
+  app-network:
+    driver: bridge
