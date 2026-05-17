@@ -1,0 +1,88 @@
+name: Java CI/CD Pipeline
+
+# Trigger the workflow on push to main and on pull requests
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        java-version: ['17']
+
+    steps:
+    # Step 1: Check out the source code from the repository
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Step 2: Set up the appropriate JDK version
+    - name: Set up JDK ${{ matrix.java-version }}
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'temurin'
+        cache: maven
+
+    # Step 3: Display Java and Maven versions (verification)
+    - name: Display Java and Maven version
+      run: |
+        echo "Java Version:"
+        java -version
+        echo ""
+        echo "Maven Version:"
+        mvn --version
+
+    # Step 4: Install project dependencies using Maven
+    - name: Install Dependencies
+      run: mvn clean install -DskipTests
+      
+    # Step 5: Compile the application and execute unit tests
+    - name: Build and Run Tests
+      run: mvn clean verify
+      
+    # Step 6: Generate test reports
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: 'target/surefire-reports/**/*.xml'
+        check_name: 'JUnit Test Results'
+        comment_title: 'Test Results'
+
+    # Step 7: Archive the generated build artifacts
+    - name: Archive Build Artifacts (JAR/WAR)
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts
+        path: target/*.jar
+        retention-days: 30
+        
+    - name: Archive Test Reports
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-reports
+        path: target/surefire-reports/
+        retention-days: 30
+
+    # Step 8: Display build summary
+    - name: Build Summary
+      if: always()
+      run: |
+        echo "========================================="
+        echo "BUILD SUMMARY"
+        echo "========================================="
+        echo "Build Status: ${{ job.status }}"
+        echo "Java Version: ${{ matrix.java-version }}"
+        echo "Repository: ${{ github.repository }}"
+        echo "Branch: ${{ github.ref }}"
+        echo "Commit: ${{ github.sha }}"
+        echo "========================================="

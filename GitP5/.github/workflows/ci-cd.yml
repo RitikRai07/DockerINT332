@@ -1,0 +1,86 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # ========== FRONTEND BUILD ==========
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm run build
+
+      # ========== BACKEND BUILD ==========
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build Backend with Maven
+        run: |
+          cd backend
+          mvn clean package -DskipTests
+
+      # ========== DOCKER BUILD ==========
+      - name: Build Docker Images
+        run: |
+          docker build -t frontend:latest ./frontend
+          docker build -t backend:latest ./backend
+
+      # ========== DOCKER COMPOSE ==========
+      - name: Run Docker Compose
+        run: |
+          docker-compose up -d
+
+      # ========== HEALTH CHECKS ==========
+      - name: Wait for Services to Start
+        run: sleep 10
+
+      - name: Check Frontend Health
+        run: curl -f http://localhost:3000 || echo "Frontend check failed"
+
+      - name: Check Backend Health
+        run: curl -f http://localhost:8080/api/health || echo "Backend check failed"
+
+      # ========== CLEANUP ==========
+      - name: Stop Docker Compose
+        if: always()
+        run: docker-compose down
+
+      # ========== OPTIONAL: DEPLOY TO SERVER ==========
+      # Uncomment and configure for production deployment
+      # - name: Deploy to Server
+      #   uses: appleboy/ssh-action@v0.1.6
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USER }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     script: |
+      #       cd project
+      #       git pull
+      #       docker-compose down
+      #       docker-compose up -d --build

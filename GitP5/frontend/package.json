@@ -1,0 +1,13 @@
+{
+  "name": "frontend-app",
+  "version": "1.0.0",
+  "description": "Frontend Node.js application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'Build complete'"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
